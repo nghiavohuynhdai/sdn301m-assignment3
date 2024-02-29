@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES6", "DOM"],
+    "types": ["reflect-metadata"],
+    "declaration": true,
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "@database/*": ["src/database/*"],
+      "@common/*": ["src/common/*"],
+      "@configs/*": ["src/configs/*"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@src/*": ["src/*"]
+    }
+  },
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  },
+  "files": ["src/type.d.ts"],
+  "include": ["src/**/*"]
+}
