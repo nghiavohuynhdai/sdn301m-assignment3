@@ -22,10 +22,6 @@ export default function Home() {
     return () => {}
   }, [search])
 
-  /*
-   * TODO: Search bar
-   */
-
   return (
     <div className='section'>
       <OrchidSearchBar onSearch={handleSearch} />

@@ -1,5 +1,5 @@
 import { OrchidDto } from '@data/orchid/orchid.dto'
-import '@view/assets/styles/home/orchid-card.scss'
+import styles from '@view/assets/styles/home/orchid-card.module.scss'
 
 interface OrchidCardProps {
   orchid: OrchidDto
@@ -8,7 +8,7 @@ interface OrchidCardProps {
 export default function OrchidCard({ orchid }: OrchidCardProps) {
 
   return (
-    <div className='card'>
+    <div className={`card ${styles.card}`}>
       <div className='card-image'>
         <figure className='image is-4by3'>
           <img src={orchid.image} alt={orchid.name} />

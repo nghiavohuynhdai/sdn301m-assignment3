@@ -1,6 +1,12 @@
+import { RouterProvider } from 'react-router-dom'
 import './assets/styles/app.scss'
-import AppRouter from './routers/router'
+import router from './routers/router'
+import { AppProvider } from './context/app-context'
 
 export default function App() {
-  return <AppRouter />
+  return (
+    <AppProvider>
+      <RouterProvider router={router} />
+    </AppProvider>
+  )
 }

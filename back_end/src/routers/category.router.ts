@@ -1,3 +1,4 @@
+import { adminAuthorizationMiddleware } from '../middlewares/admin-authorization.middleware'
 import { Router, RequestHandler } from 'express'
 import { isValidObjectId } from 'mongoose'
 import { ResponseDto } from '@common/dto/response.dto'
@@ -8,6 +9,7 @@ import { NotFoundException } from '@common/exceptions/not-found.exception'
 import { createCategory } from '@src/features/category/create-category'
 import { updateCategory } from '@src/features/category/update-category'
 import { deleteCategory } from '@src/features/category/delete-category'
+import passport from 'passport'
 
 const getAllCategoriesHandler: RequestHandler = async (_, res) => {
   const categories = await getAllCategories()
@@ -113,14 +115,43 @@ const deleteCategoryHandler: RequestHandler = async (req, res, next) => {
 
 const categoryRouter = Router()
 
-categoryRouter.get('/', getAllCategoriesHandler)
+categoryRouter.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  adminAuthorizationMiddleware,
+  getAllCategoriesHandler
+)
 
-categoryRouter.get('/:id', getCategoryByIdValidator, getCategoryByIdHandler)
+categoryRouter.get(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  adminAuthorizationMiddleware,
+  getCategoryByIdValidator,
+  getCategoryByIdHandler
+)
 
-categoryRouter.post('/', createCategoryValidator, createCategoryHandler)
+categoryRouter.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  adminAuthorizationMiddleware,
+  createCategoryValidator,
+  createCategoryHandler
+)
 
-categoryRouter.put('/:id', updateCategoryValidator, updateCategoryHandler)
+categoryRouter.put(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  adminAuthorizationMiddleware,
+  updateCategoryValidator,
+  updateCategoryHandler
+)
 
-categoryRouter.delete('/:id', deleteCategoryValidator, deleteCategoryHandler)
+categoryRouter.delete(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  adminAuthorizationMiddleware,
+  deleteCategoryValidator,
+  deleteCategoryHandler
+)
 
 export { categoryRouter }

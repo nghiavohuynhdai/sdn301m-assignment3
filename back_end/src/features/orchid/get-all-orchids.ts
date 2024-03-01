@@ -12,6 +12,7 @@ export const getAllOrchids = async (filter: { name: string } | null) => {
     {},
     { populate: 'category' }
   )
+    .sort({ createdAt: -1 })
     .lean()
     .exec()
   return orchids

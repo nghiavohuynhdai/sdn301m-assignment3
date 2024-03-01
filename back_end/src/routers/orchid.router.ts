@@ -1,6 +1,7 @@
 import { ResponseDto } from '@common/dto/response.dto'
 import { BadRequestException } from '@common/exceptions/bad-request.exception'
 import { NotFoundException } from '@common/exceptions/not-found.exception'
+import { adminAuthorizationMiddleware } from '@middlewares/admin-authorization.middleware'
 import { createOrchid } from '@src/features/orchid/create-orchid'
 import { deleteOrchid } from '@src/features/orchid/delete-orchid'
 import { getAllOrchids } from '@src/features/orchid/get-all-orchids'
@@ -8,6 +9,7 @@ import { getOrchidBySlug } from '@src/features/orchid/get-orchid-by-slug'
 import { updateOrchid } from '@src/features/orchid/update-orchid'
 import { Router, RequestHandler } from 'express'
 import { isValidObjectId } from 'mongoose'
+import passport from 'passport'
 
 const getAllOrchidsHandler: RequestHandler = async (req, res) => {
   const filter = req.query.name ? { name: req.query.name as string } : null
@@ -162,10 +164,27 @@ orchidRouter.get('/', getAllOrchidsHandler)
 
 orchidRouter.get('/:slug', getOrchidBySlugHandler)
 
-orchidRouter.post('/', createOrchidValidator, createOrchidHandler)
+orchidRouter.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  adminAuthorizationMiddleware,
+  createOrchidValidator,
+  createOrchidHandler
+)
 
-orchidRouter.put('/:slug', updateOrchidValidator, updateOrchidHandler)
+orchidRouter.put(
+  '/:slug',
+  passport.authenticate('jwt', { session: false }),
+  adminAuthorizationMiddleware,
+  updateOrchidValidator,
+  updateOrchidHandler
+)
 
-orchidRouter.delete('/:slug', deleteOrchidHandler)
+orchidRouter.delete(
+  '/:slug',
+  passport.authenticate('jwt', { session: false }),
+  adminAuthorizationMiddleware,
+  deleteOrchidHandler
+)
 
 export { orchidRouter }

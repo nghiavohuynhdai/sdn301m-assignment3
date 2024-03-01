@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getOrchidDetails } from '@data/orchid/orchid-api'
 import { OrchidDetailsDto } from '@data/orchid/orchid.dto'
+import OrchidCommentList from './component/orchid-comment-list'
 
 export default function OrchidDetails() {
   const [orchid, setOrchid] = useState<OrchidDetailsDto | null>(null)
@@ -36,11 +37,7 @@ export default function OrchidDetails() {
           <p>
             <strong>Comments:</strong>
           </p>
-          <ul>
-            {orchid.comments?.map((comment, index) => (
-              <li key={index}>{comment}</li>
-            ))}
-          </ul>
+          <OrchidCommentList comments={orchid.comments} />
         </div>
       </div>
     </div>
