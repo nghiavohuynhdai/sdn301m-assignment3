@@ -4,9 +4,11 @@ import { useCallback, useEffect, useState } from 'react'
 import CreateOrchidModal from './components/create-orchid-modal'
 import UpdateOrchidModal from './components/update-orchid-modal'
 import DeleteOrchidModal from './components/delete-orchid-modal'
+import ViewOrchidModal from './components/view-orchid-modal'
 
 export default function Orchids() {
   const [orchids, setOrchids] = useState<OrchidDto[]>([])
+  const [viewOrchidModal, setViewOrchidModal] = useState(false)
   const [createOrchidModal, setCreateOrchidModal] = useState(false)
   const [updateOrchidModal, setUpdateOrchidModal] = useState(false)
   const [selectedOrchidSlug, setSelectedOrchidSlug] = useState<string>('')
@@ -21,6 +23,11 @@ export default function Orchids() {
     getData()
     return () => {}
   }, [getData])
+
+  const handleViewButton = (orchidSlug: string) => {
+    setSelectedOrchidSlug(orchidSlug)
+    setViewOrchidModal(true)
+  }
 
   const handleEditButton = (orchidSlug: string) => {
     setSelectedOrchidSlug(orchidSlug)
@@ -77,7 +84,7 @@ export default function Orchids() {
               <td>{orchid.category?.name}</td>
               <td>
                 <div className='buttons'>
-                  <button className='button is-info'>View</button>
+                  <button className='button is-info' onClick={() => handleViewButton(orchid.slug)}>View</button>
                   <button className='button is-primary' onClick={() => handleEditButton(orchid.slug)}>
                     Edit
                   </button>
@@ -95,6 +102,16 @@ export default function Orchids() {
         onClose={() => setCreateOrchidModal(false)}
         onSuccess={handleCreateSuccess}
       />
+      {selectedOrchidSlug && (
+        <ViewOrchidModal
+          isOpen={viewOrchidModal}
+          orchidSlug={selectedOrchidSlug}
+          onClose={() => {
+            setSelectedOrchidSlug('')
+            setViewOrchidModal(false)
+          }}
+        />
+      )}
       {selectedOrchidSlug && (
         <UpdateOrchidModal
           isOpen={updateOrchidModal}
