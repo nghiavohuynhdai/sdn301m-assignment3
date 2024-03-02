@@ -1,7 +1,7 @@
 import PrivateContainer from '@view/components/private-container'
 import { AppContext } from '@view/context/app-context'
 import { useContext, useEffect, useState } from 'react'
-import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 const tabs = [
   {
@@ -17,9 +17,16 @@ const tabs = [
     path: '/admin/users'
   }
 ]
+
+const getCurrentTab = (path: string) => {
+  const tab = tabs.find((tab) => path === tab.path)
+  return tab ? tab.name : tabs[0].name
+}
+
 export default function AdminLayout() {
   const { user } = useContext(AppContext)
-  const [selectedTab, setSelectedTab] = useState(tabs[0].name)
+  const location = useLocation()
+  const [selectedTab, setSelectedTab] = useState(getCurrentTab(location.pathname))
   const navigate = useNavigate()
   useEffect(() => {
     if (!user || !user.isAdmin) {

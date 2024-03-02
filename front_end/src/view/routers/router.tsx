@@ -7,6 +7,8 @@ import Register from '@view/pages/register/register'
 import Profile from '@view/pages/user/profile/profile'
 import Orchids from '@view/pages/admin/orchids/orchids'
 import AdminLayout from '@view/pages/admin/admin-layout'
+import Categories from '@view/pages/admin/categories/categories'
+import Users from '@view/pages/admin/users/users'
 
 const router = createBrowserRouter([
   {
@@ -23,8 +25,8 @@ const router = createBrowserRouter([
         element: <AdminLayout />,
         children: [
           { path: 'orchids', element: <Orchids /> },
-          { path: 'categories', element: <div>Categories</div> },
-          { path: 'users', element: <div>Users</div> }
+          { path: 'categories', element: <Categories /> },
+          { path: 'users', element: <Users /> }
         ]
       }
     ]

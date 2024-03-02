@@ -32,7 +32,7 @@ export default function UpdateOrchidForm({ orchid, onSuccess }: UpdateOrchidForm
       categoryId: { value: string }
     }
 
-    const createResult = await updateOrchid(
+    const updateResult = await updateOrchid(
       orchid.slug,
       target.name.value,
       target.image.value,
@@ -41,8 +41,8 @@ export default function UpdateOrchidForm({ orchid, onSuccess }: UpdateOrchidForm
       target.categoryId.value
     )
 
-    if (typeof createResult === 'string') {
-      toast.error(createResult)
+    if (typeof updateResult === 'string') {
+      toast.error(updateResult)
     } else {
       toast.success('Orchid updated')
       onSuccess()
@@ -90,7 +90,7 @@ export default function UpdateOrchidForm({ orchid, onSuccess }: UpdateOrchidForm
       </div>
       <div className='field'>
         <div className='select'>
-          <select name='categoryId'>
+          <select name='categoryId' defaultValue={orchid.category?._id}>
             <option value=''>Select category</option>
             {categories.map((category) => (
               <option key={category.name} value={category._id} selected={category._id === orchid.category?._id}>

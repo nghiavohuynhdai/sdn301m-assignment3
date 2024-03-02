@@ -9,9 +9,67 @@ const getAllCategories = async () => {
     const responseDto: ResponseDto<CategoryDto[]> = await response.json()
     return responseDto.data
   } catch (error) {
-    console.error(error)
+    console.log(error)
     return []
   }
 }
 
-export { getAllCategories }
+const createCategory = async (name: string) => {
+  try {
+    const response = await fetch(API_ROUTE, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name })
+    })
+    const responseDto: ResponseDto<unknown> = await response.json()
+    if (responseDto.status !== 201) {
+      return responseDto.message
+    }
+    return true
+  } catch (error) {
+    console.log(error)
+    return 'Server error'
+  }
+}
+
+const updateCategory = async (id: string, name: string) => {
+  try {
+    const response = await fetch(`${API_ROUTE}/${id}`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name })
+    })
+    const responseDto: ResponseDto<unknown> = await response.json()
+    if (responseDto.status !== 200) {
+      return responseDto.message
+    }
+    return true
+  } catch (error) {
+    console.log(error)
+    return 'Server error'
+  }
+}
+
+const deleteCategory = async (id: string) => {
+  try {
+    const response = await fetch(`${API_ROUTE}/${id}`, {
+      method: 'DELETE',
+      credentials: 'include'
+    })
+    const responseDto: ResponseDto<unknown> = await response.json()
+    if (responseDto.status !== 200) {
+      return responseDto.message
+    }
+  } catch (error) {
+    console.log(error)
+    return 'Server error'
+  }
+}
+
+export { getAllCategories, createCategory, updateCategory, deleteCategory }

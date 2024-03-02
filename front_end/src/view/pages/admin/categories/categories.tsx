@@ -1,6 +1,9 @@
 import { getAllCategories } from '@data/category/category-api'
 import { CategoryDto } from '@data/category/category.dto'
 import { useCallback, useEffect, useState } from 'react'
+import CreateCategoryModal from './components/create-category-modal'
+import UpdateCategoryModal from './components/update-category-modal'
+import DeleteCategoryModal from './components/delete-category-modal'
 
 export default function Categories() {
   const [categories, setCategories] = useState<CategoryDto[]>([])
@@ -29,6 +32,23 @@ export default function Categories() {
     setDeleteCategoryModal(true)
   }
 
+  const handleCreateSuccess = async () => {
+    setCreateCategoryModal(false)
+    getData()
+  }
+
+  const handleUpdateSuccess = async () => {
+    setSelectedCategory(null)
+    setUpdateCategoryModal(false)
+    getData()
+  }
+
+  const handleDeleteSuccess = async () => {
+    setSelectedCategory(null)
+    setDeleteCategoryModal(false)
+    getData()
+  }
+
   return (
     <>
       <button className='button is-primary' onClick={() => setCreateCategoryModal(true)}>
@@ -48,18 +68,40 @@ export default function Categories() {
               <td>{index + 1}</td>
               <td>{category.name}</td>
               <td>
-                <button className='button is-info'>View</button>
-                <button className='button is-primary' onClick={() => handleEditButton(category)}>
-                  Edit
-                </button>
-                <button className='button is-danger' onClick={() => handleDeleteButton(category)}>
-                  Delete
-                </button>
+                <div className='buttons'>
+                  <button className='button is-primary' onClick={() => handleEditButton(category)}>
+                    Edit
+                  </button>
+                  <button className='button is-danger' onClick={() => handleDeleteButton(category)}>
+                    Delete
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <CreateCategoryModal
+        isOpen={createCategoryModal}
+        onClose={() => setCreateCategoryModal(false)}
+        onSuccess={handleCreateSuccess}
+      />
+      {selectedCategory && (
+        <UpdateCategoryModal
+          isOpen={updateCategoryModal}
+          onClose={() => setUpdateCategoryModal(false)}
+          onSuccess={handleUpdateSuccess}
+          category={selectedCategory}
+        />
+      )}
+      {selectedCategory && (
+        <DeleteCategoryModal
+          isOpen={deleteCategoryModal}
+          onClose={() => setDeleteCategoryModal(false)}
+          onSuccess={handleDeleteSuccess}
+          category={selectedCategory}
+        />
+      )}
     </>
   )
 }

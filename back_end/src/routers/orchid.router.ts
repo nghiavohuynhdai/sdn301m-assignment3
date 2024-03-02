@@ -54,7 +54,7 @@ const createOrchidValidator: RequestHandler = (req, res, next) => {
   }
 
   if (!body.origin) {
-    throw new BadRequestException('orchid original is required')
+    throw new BadRequestException('orchid origin is required')
   }
 
   if (!body.categoryId) {
@@ -106,7 +106,7 @@ const updateOrchidValidator: RequestHandler = (req, res, next) => {
   }
 
   if (!body.origin) {
-    throw new BadRequestException('orchid original is required')
+    throw new BadRequestException('orchid origin is required')
   }
 
   if (body.isNatural == null || body.isNatural == undefined) {
@@ -114,7 +114,7 @@ const updateOrchidValidator: RequestHandler = (req, res, next) => {
   }
 
   if (!body.categoryId) {
-    throw new BadRequestException('orchid color is required')
+    throw new BadRequestException('orchid category is required')
   }
 
   if (isValidObjectId(body.categoryId) === false) {
