@@ -3,17 +3,6 @@ import { UserDto } from './user.dto'
 
 const API_ROUTE = `${import.meta.env.VITE_API_URL}/users`
 
-const getAllUsers = async () => {
-  try {
-    const response = await fetch(API_ROUTE, { credentials: 'include' })
-    const responseDto: ResponseDto<UserDto[]> = await response.json()
-    return responseDto.data
-  } catch (error) {
-    console.log(error)
-    return []
-  }
-}
-
 const loginUser = async (username: string, password: string) => {
   try {
     const response = await fetch(`${API_ROUTE}/login`, {
@@ -110,4 +99,4 @@ const changeUserPassword = async (currentPassword: string, newPassword: string) 
   }
 }
 
-export { getAllUsers, loginUser, logoutUser, registerUser, getUserProfile, updateUserProfile, changeUserPassword }
+export { loginUser, logoutUser, registerUser, getUserProfile, updateUserProfile, changeUserPassword }

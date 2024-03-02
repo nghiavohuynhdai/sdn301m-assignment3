@@ -1,5 +1,5 @@
 import { CategoryDto } from '@data/category/category.dto'
-import { CommentDto } from '@data/comment/comment.dto'
+import { CommentDto } from '@data/orchid/comment/comment.dto'
 
 interface OrchidDto {
   slug: string

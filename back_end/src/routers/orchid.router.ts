@@ -1,3 +1,4 @@
+import { createComment } from '@src/features/orchid/comment/create-comment'
 import { ResponseDto } from '@common/dto/response.dto'
 import { BadRequestException } from '@common/exceptions/bad-request.exception'
 import { NotFoundException } from '@common/exceptions/not-found.exception'
@@ -94,7 +95,6 @@ const updateOrchidValidator: RequestHandler = (req, res, next) => {
     isNatural?: boolean
     origin?: string
     categoryId?: string
-    slug?: string
   } = req.body
 
   if (!body.name) {
@@ -119,10 +119,6 @@ const updateOrchidValidator: RequestHandler = (req, res, next) => {
 
   if (isValidObjectId(body.categoryId) === false) {
     throw new BadRequestException('Invalid category id')
-  }
-
-  if (!req.params.slug) {
-    throw new BadRequestException('orchid slug is required')
   }
 
   next()
@@ -158,6 +154,43 @@ const deleteOrchidHandler: RequestHandler = async (req, res, next) => {
   }
 }
 
+const createCommentValidator: RequestHandler = (req, res, next) => {
+  const body: { rating?: number; comment?: string } = req.body
+
+  if (!body.rating) {
+    throw new BadRequestException('rating is required')
+  }
+
+  if (body.rating < 1 || body.rating > 5) {
+    throw new BadRequestException('rating must be between 1 and 5')
+  }
+
+  if (!body.comment) {
+    throw new BadRequestException('comment is required')
+  }
+
+  next()
+}
+
+const createCommentHandler: RequestHandler = async (req, res, next) => {
+  const expressUser = req.user as {
+    _id: string
+    name: string
+    isAdmin: boolean
+  }
+
+  const body: { rating: number; comment: string } = req.body
+
+  try {
+    await createComment(req.params.slug, body.rating, body.comment, expressUser._id)
+
+    res.statusCode = 201
+    res.json(new ResponseDto(201, 'comment created'))
+  } catch (error) {
+    next(error)
+  }
+}
+
 const orchidRouter = Router()
 
 orchidRouter.get('/', getAllOrchidsHandler)
@@ -185,6 +218,13 @@ orchidRouter.delete(
   passport.authenticate('jwt', { session: false }),
   adminAuthorizationMiddleware,
   deleteOrchidHandler
+)
+
+orchidRouter.post(
+  '/:slug/comments',
+  passport.authenticate('jwt', { session: false }),
+  createCommentValidator,
+  createCommentHandler
 )
 
 export { orchidRouter }

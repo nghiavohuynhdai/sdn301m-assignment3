@@ -12,6 +12,6 @@ export const createOrchid = async (
   let orchid = await Orchids.findOne({ name: name }).exec()
   if (orchid) throw new BadRequestException('Orchid name exits')
   const slug = kebabCase(name)
-  orchid = new Orchids({ name, image, isNatural, origin, slug, category: categoryId, comment: [] })
+  orchid = new Orchids({ name, image, isNatural, origin, slug, category: categoryId, comments: [] })
   await orchid.save()
 }

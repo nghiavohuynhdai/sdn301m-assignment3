@@ -4,7 +4,7 @@ interface CommentDto {
     rating: number
     comment: string
     author: UserDto
-    createdAt: Date
+    createdAt: string
 }
 
 export type { CommentDto }

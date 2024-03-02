@@ -13,8 +13,8 @@ const tabs = [
     path: '/admin/categories'
   },
   {
-    name: 'Users',
-    path: '/admin/users'
+    name: 'Accounts',
+    path: '/admin/accounts'
   }
 ]
 

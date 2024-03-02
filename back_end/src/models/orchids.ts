@@ -8,7 +8,7 @@ const orchidSchema = new Schema(
     image: { type: String, isRequired: true },
     isNatural: { type: Boolean, default: false },
     origin: { type: String, isRequired: true },
-    comment: { type: [commentSchema], isRequired: true },
+    comments: [commentSchema],
     category: { type: Schema.Types.ObjectId, ref: 'categories', required: true }
   },
   { timestamps: true }

@@ -33,20 +33,20 @@ export default function Categories() {
   }
 
   const handleCreateSuccess = async () => {
+    await getData()
     setCreateCategoryModal(false)
-    getData()
   }
 
   const handleUpdateSuccess = async () => {
+    await getData()
     setSelectedCategory(null)
     setUpdateCategoryModal(false)
-    getData()
   }
 
   const handleDeleteSuccess = async () => {
+    await getData()
     setSelectedCategory(null)
     setDeleteCategoryModal(false)
-    getData()
   }
 
   return (

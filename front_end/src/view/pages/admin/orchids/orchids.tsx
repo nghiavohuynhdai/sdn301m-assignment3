@@ -40,20 +40,20 @@ export default function Orchids() {
   }
 
   const handleCreateSuccess = async () => {
+    await getData()
     setCreateOrchidModal(false)
-    getData()
   }
 
   const handleUpdateSuccess = async () => {
+    await getData()
     setSelectedOrchidSlug('')
     setUpdateOrchidModal(false)
-    getData()
   }
 
   const handleDeleteSuccess = async () => {
+    await getData()
     setSelectedOrchidSlug('')
     setDeleteOrchidModal(false)
-    getData()
   }
 
   return (
@@ -84,7 +84,9 @@ export default function Orchids() {
               <td>{orchid.category?.name}</td>
               <td>
                 <div className='buttons'>
-                  <button className='button is-info' onClick={() => handleViewButton(orchid.slug)}>View</button>
+                  <button className='button is-info' onClick={() => handleViewButton(orchid.slug)}>
+                    View
+                  </button>
                   <button className='button is-primary' onClick={() => handleEditButton(orchid.slug)}>
                     Edit
                   </button>

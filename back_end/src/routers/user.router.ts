@@ -7,15 +7,9 @@ import { registerUser } from '@src/features/user/register-user'
 import { jwtExpiration } from '@configs/auth/auth.config'
 import { getUserProfile } from '@src/features/user/get-user-profile'
 import passport from 'passport'
-import { getAllUsers } from '@src/features/user/get-all-user'
 import { updateUserProfile } from '@src/features/user/update-user-profile'
 import { changeUserPassword } from '@src/features/user/change-user-password'
 import { adminAuthorizationMiddleware } from '@middlewares/admin-authorization.middleware'
-
-const getAllUsersHandler: RequestHandler = async (req, res, next) => {
-  const users = await getAllUsers()
-  res.json(new ResponseDto(200, '', users))
-}
 
 const getUserProfileHandler: RequestHandler = async (req, res, next) => {
   const expressUser = req.user as {
@@ -178,8 +172,6 @@ const changeUserPasswordHandler: RequestHandler = async (req, res, next) => {
 }
 
 const userRouter = Router()
-
-userRouter.get('/', passport.authenticate('jwt', { session: false }), adminAuthorizationMiddleware, getAllUsersHandler)
 
 userRouter.get('/profile', passport.authenticate('jwt', { session: false }), getUserProfileHandler)
 
