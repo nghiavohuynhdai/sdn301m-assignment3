@@ -8,5 +8,5 @@ export const createComment = async (orchidSlug: string, rating: number, comment:
   const commentIndex = orchid.comments.findIndex((c) => c.author.toString() === userId)
   if (commentIndex !== -1) throw new BadRequestException('You already commented')
   orchid.comments.push({ rating, comment, author: userId })
-  orchid.save()
+  await orchid.save()
 }

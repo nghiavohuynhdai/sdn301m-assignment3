@@ -1,21 +1,35 @@
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
+import { toast } from 'react-toastify'
 
 const MIN_RATING = 1
 const MAX_RATING = 5
 
 interface OrchidCommentInputProps {
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
+  postComment: (rating: number, comment: string) => void
 }
 
-export default function OrchidCommentInput({ onSubmit }: OrchidCommentInputProps) {
+export default function OrchidCommentInput({ postComment }: OrchidCommentInputProps) {
   const [rating, setRating] = useState(0)
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const target = event.target as typeof event.target & {
+      rating: { value: number }
+      comment: { value: string }
+    }
+    if (rating < MIN_RATING) {
+      toast.error(`Rating must be at least ${MIN_RATING} star`)
+      return
+    }
+    postComment(target.rating.value, target.comment.value)
+  }
 
   return (
     <article className='media'>
       <div className='media-content'>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit}>
           <div className='field'>
             <div className='control'>
               {Array.from({ length: rating }).map((_, index) => (
@@ -28,7 +42,7 @@ export default function OrchidCommentInput({ onSubmit }: OrchidCommentInputProps
                   <FontAwesomeIcon icon={faStar} style={{ color: '#C4C6D1' }} />
                 </a>
               ))}
-              <input hidden type='number' name='rating' min={MIN_RATING} max={MAX_RATING} value={rating} readOnly />
+              <input hidden type='number' name='rating' value={rating} readOnly />
             </div>
           </div>
           <div className='field'>

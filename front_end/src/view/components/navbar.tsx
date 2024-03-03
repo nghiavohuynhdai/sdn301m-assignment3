@@ -56,9 +56,9 @@ export default function Navbar() {
                   <Link className='button is-primary' to='/profile'>
                     <strong>Profile</strong>
                   </Link>
-                  <button className='button is-light' onClick={handleLogout}>
+                  <Link className='button is-light' to='/' onClick={handleLogout}>
                     Logout
-                  </button>
+                  </Link>
                 </>
               ) : (
                 <>

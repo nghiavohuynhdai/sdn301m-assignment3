@@ -25,13 +25,8 @@ export default function OrchidDetails() {
     return () => {}
   }, [getData])
 
-  const postComment = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const target = event.target as typeof event.target & {
-      rating: { value: number }
-      comment: { value: string }
-    }
-    const postCommentResult = await createComment(orchid!.slug, target.rating.value, target.comment.value)
+  const postComment = async (rating: number, comment: string) => {
+    const postCommentResult = await createComment(orchid!.slug, rating, comment)
     if (typeof postCommentResult === 'string') {
       toast.error(postCommentResult)
     } else {
@@ -62,11 +57,13 @@ export default function OrchidDetails() {
         </div>
       </div>
       <div className='section'>
-      <h2 className='subtitle is-4'>Comment</h2>
+        <h2 className='subtitle is-4'>Comment</h2>
         {orchid.comments.length !== 0 && <OrchidCommentList comments={orchid.comments} />}
-        {isLogin && orchid.comments.findIndex((comment) => comment.author._id === user!._id) === -1 && (
-          <OrchidCommentInput onSubmit={postComment} />
-        )}
+        {isLogin &&
+          !user!.isAdmin &&
+          orchid.comments.findIndex((comment) => comment.author._id === user!._id) === -1 && (
+            <OrchidCommentInput postComment={postComment} />
+          )}
       </div>
     </>
   ) : null

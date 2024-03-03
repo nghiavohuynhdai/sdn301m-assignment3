@@ -1,8 +1,9 @@
+import { Role } from '@common/constants/role.constants'
 import { ResponseDto } from '@common/dto/response.dto'
-import { adminAuthorizationMiddleware } from '@middlewares/admin-authorization.middleware'
+import { jwtAuthenticationMiddleware } from '@middlewares/jwt-authentication.middleware'
+import { roleBasedAuthorizationMiddleware } from '@middlewares/role-based-authorization.middleware'
 import { getAllUsers } from '@src/features/user/get-all-user'
 import { RequestHandler, Router } from 'express'
-import passport from 'passport'
 
 const getAllAccountsHandler: RequestHandler = async (req, res, next) => {
   const users = await getAllUsers()
@@ -13,8 +14,8 @@ const accountRouter = Router()
 
 accountRouter.get(
   '/',
-  passport.authenticate('jwt', { session: false }),
-  adminAuthorizationMiddleware,
+  jwtAuthenticationMiddleware,
+  roleBasedAuthorizationMiddleware([Role.ADMIN]),
   getAllAccountsHandler
 )
 

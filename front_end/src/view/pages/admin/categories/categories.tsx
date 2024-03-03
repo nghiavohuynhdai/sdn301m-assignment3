@@ -81,11 +81,13 @@ export default function Categories() {
           ))}
         </tbody>
       </table>
-      <CreateCategoryModal
-        isOpen={createCategoryModal}
-        onClose={() => setCreateCategoryModal(false)}
-        onSuccess={handleCreateSuccess}
-      />
+      {createCategoryModal && (
+        <CreateCategoryModal
+          isOpen={createCategoryModal}
+          onClose={() => setCreateCategoryModal(false)}
+          onSuccess={handleCreateSuccess}
+        />
+      )}
       {selectedCategory && (
         <UpdateCategoryModal
           isOpen={updateCategoryModal}

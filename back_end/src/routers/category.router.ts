@@ -1,4 +1,3 @@
-import { adminAuthorizationMiddleware } from '../middlewares/admin-authorization.middleware'
 import { Router, RequestHandler } from 'express'
 import { isValidObjectId } from 'mongoose'
 import { ResponseDto } from '@common/dto/response.dto'
@@ -9,7 +8,9 @@ import { NotFoundException } from '@common/exceptions/not-found.exception'
 import { createCategory } from '@src/features/category/create-category'
 import { updateCategory } from '@src/features/category/update-category'
 import { deleteCategory } from '@src/features/category/delete-category'
-import passport from 'passport'
+import { roleBasedAuthorizationMiddleware } from '@middlewares/role-based-authorization.middleware'
+import { Role } from '@common/constants/role.constants'
+import { jwtAuthenticationMiddleware } from '@middlewares/jwt-authentication.middleware'
 
 const getAllCategoriesHandler: RequestHandler = async (_, res) => {
   const categories = await getAllCategories()
@@ -117,39 +118,39 @@ const categoryRouter = Router()
 
 categoryRouter.get(
   '/',
-  passport.authenticate('jwt', { session: false }),
-  adminAuthorizationMiddleware,
+  jwtAuthenticationMiddleware,
+  roleBasedAuthorizationMiddleware([Role.ADMIN]),
   getAllCategoriesHandler
 )
 
 categoryRouter.get(
   '/:id',
-  passport.authenticate('jwt', { session: false }),
-  adminAuthorizationMiddleware,
+  jwtAuthenticationMiddleware,
+  roleBasedAuthorizationMiddleware([Role.ADMIN]),
   getCategoryByIdValidator,
   getCategoryByIdHandler
 )
 
 categoryRouter.post(
   '/',
-  passport.authenticate('jwt', { session: false }),
-  adminAuthorizationMiddleware,
+  jwtAuthenticationMiddleware,
+  roleBasedAuthorizationMiddleware([Role.ADMIN]),
   createCategoryValidator,
   createCategoryHandler
 )
 
 categoryRouter.put(
   '/:id',
-  passport.authenticate('jwt', { session: false }),
-  adminAuthorizationMiddleware,
+  jwtAuthenticationMiddleware,
+  roleBasedAuthorizationMiddleware([Role.ADMIN]),
   updateCategoryValidator,
   updateCategoryHandler
 )
 
 categoryRouter.delete(
   '/:id',
-  passport.authenticate('jwt', { session: false }),
-  adminAuthorizationMiddleware,
+  jwtAuthenticationMiddleware,
+  roleBasedAuthorizationMiddleware([Role.ADMIN]),
   deleteCategoryValidator,
   deleteCategoryHandler
 )

@@ -99,11 +99,13 @@ export default function Orchids() {
           ))}
         </tbody>
       </table>
-      <CreateOrchidModal
-        isOpen={createOrchidModal}
-        onClose={() => setCreateOrchidModal(false)}
-        onSuccess={handleCreateSuccess}
-      />
+      {createOrchidModal && (
+        <CreateOrchidModal
+          isOpen={createOrchidModal}
+          onClose={() => setCreateOrchidModal(false)}
+          onSuccess={handleCreateSuccess}
+        />
+      )}
       {selectedOrchidSlug && (
         <ViewOrchidModal
           isOpen={viewOrchidModal}

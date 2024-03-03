@@ -1,4 +1,3 @@
-import { isValidObjectId } from 'mongoose'
 import { ResponseDto } from '@common/dto/response.dto'
 import { BadRequestException } from '@common/exceptions/bad-request.exception'
 import { loginUser } from '@src/features/user/login-user'
@@ -6,10 +5,9 @@ import { RequestHandler, Router } from 'express'
 import { registerUser } from '@src/features/user/register-user'
 import { jwtExpiration } from '@configs/auth/auth.config'
 import { getUserProfile } from '@src/features/user/get-user-profile'
-import passport from 'passport'
 import { updateUserProfile } from '@src/features/user/update-user-profile'
 import { changeUserPassword } from '@src/features/user/change-user-password'
-import { adminAuthorizationMiddleware } from '@middlewares/admin-authorization.middleware'
+import { jwtAuthenticationMiddleware } from '@middlewares/jwt-authentication.middleware'
 
 const getUserProfileHandler: RequestHandler = async (req, res, next) => {
   const expressUser = req.user as {
@@ -173,21 +171,16 @@ const changeUserPasswordHandler: RequestHandler = async (req, res, next) => {
 
 const userRouter = Router()
 
-userRouter.get('/profile', passport.authenticate('jwt', { session: false }), getUserProfileHandler)
+userRouter.get('/profile', jwtAuthenticationMiddleware, getUserProfileHandler)
 
 userRouter.post('/login', loginValidator, loginHandler)
 
-userRouter.post('/logout', passport.authenticate('jwt', { session: false }), logoutUserHandler)
+userRouter.post('/logout', jwtAuthenticationMiddleware, logoutUserHandler)
 
 userRouter.post('/register', registerValidator, registerHandler)
 
-userRouter.put('/profile', passport.authenticate('jwt', { session: false }), updateUserValidator, updateUserHandler)
+userRouter.put('/profile', jwtAuthenticationMiddleware, updateUserValidator, updateUserHandler)
 
-userRouter.put(
-  '/password',
-  passport.authenticate('jwt', { session: false }),
-  changeUserPasswordValidator,
-  changeUserPasswordHandler
-)
+userRouter.put('/password', jwtAuthenticationMiddleware, changeUserPasswordValidator, changeUserPasswordHandler)
 
 export { userRouter }
