@@ -148,6 +148,10 @@ const changeUserPasswordValidator: RequestHandler = (req, res, next) => {
     throw new BadRequestException('newPassword is required')
   }
 
+  if (body.currentPassword === body.newPassword) {
+    throw new BadRequestException('New password is same as old password')
+  }
+
   next()
 }
 
